@@ -1,14 +1,20 @@
 CC = gcc
 CFLAGS = -Wall -O2
+LDFLAGS = -lpthread -lm
+TARGET = floatsim
 SRCS := $(wildcard *.c)
-TARGET = $(SRCS:%.c=%)
+OBJS = $(SRCS:.c=.o)
+DEPS = $(SRCS:.c:.dep)
+# RM = rm -f
 
-.PHONY: all
-all: $(TARGET)
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
-%: %.c
-	$(CC) -o $@ $^
+%.dep:%.c
+	$(SHELL) -c '$(CC) -MM $< > $@'
+
+-include $(DEPS)
 
 .PHONY: clean
 clean:
-	$(RM) $(TARGET)
+	$(RM) $(TARGET) $(DEPS) $(OBJS)

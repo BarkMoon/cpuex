@@ -37,6 +37,7 @@ unsigned int RN(unsigned int f28, unsigned int *e){ // X Y a_-1 a_-2 ... a_-23 a
 void AddSEF(sef *l, sef *s, sef *ans){
   unsigned int shift = (l->e - s->e) >> 23;
   unsigned int mask, u8, lf28, sf28;
+  unsigned int sub28;
   ans->s = l->s;
   ans->e = l->e;
   if(shift >= 25 || s->e == 0){    // けち表現により、0は2^-127と同一になってしまうため例外
@@ -60,7 +61,36 @@ void AddSEF(sef *l, sef *s, sef *ans){
   /*printf("lf28, sf28\n");
   PrintUIntBin(lf28);
   PrintUIntBin(sf28);*/
-  ans->f = RN(lf28 + sf28, &ans->e);
+  
+  // 答えが負になるパターンがまだ未実装
+  
+  if(l->s ^ s->s){   // signが異なる場合
+    sub28 = lf28 - sf28;
+    if(sub28 == 0){
+      ans->e = 0;
+      ans->f = 0;
+    }
+    else{
+      /*printf("lf28とsf28\n");
+      PrintUIntBin(lf28);
+      PrintUIntBin(sf28);
+      printf("sub28とe\n");
+      PrintUIntBin(sub28);
+      PrintUIntBin(ans->e);
+      PrintUIntBin(1 << 26);*/
+      while((sub28 & (1 << 26)) == 0){   // けち表現bitの27bit目が1になるまでシフト
+        ans->e -= (1 << 23);
+        sub28 <<= 1;
+        /*printf("sub28とe\n");
+        PrintUIntBin(sub28);
+        PrintUIntBin(ans->e);*/
+      }
+      ans->f = RN(sub28, &ans->e);
+    }
+  }
+  else{
+    ans->f = RN(lf28 + sf28, &ans->e);
+  }
 }
 
 float AddFloat(float f1, float f2){
@@ -81,6 +111,12 @@ float AddFloat(float f1, float f2){
   AddSEF(l, s, &ans);
   CatSEF(&ans);
   return ans.raw;
+}
+
+float SubFloat(float f1, float f2){
+  unsigned int u2 = ftou(f2);
+  u2 += (1 << 31);    // u2のsignビットを反転
+  return AddFloat(f1, utof(u2));
 }
 
 float normalize(float denf){

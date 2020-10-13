@@ -10,6 +10,10 @@ typedef struct{
   unsigned int s, e, f;
 }sef;
 
+typedef enum{
+  ADD, SUB
+}OPERATOR;
+
 extern const unsigned int emask;
 extern const unsigned int fmask;
 

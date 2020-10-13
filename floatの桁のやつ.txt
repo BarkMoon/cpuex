@@ -1,3 +1,7 @@
 0	2~9		11~33
 31	30~23		22~0
 sign	exponent	fraction
+
+桁落ち
+shift	Sの範囲			ansの範囲		結論
+0	(L/2 <)2^(Le-127)～L	0.0～(Lf)*2^(Le-127)	e=0～Le-2

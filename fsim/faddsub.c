@@ -62,7 +62,7 @@ void AddSEF(sef *l, sef *s, sef *ans){
   PrintUIntBin(lf28);
   PrintUIntBin(sf28);*/
   
-  // 答えが負になるパターンがまだ未実装
+  // (小 - 大)または(小 + (-大))で答えが負になるパターンがまだ未実装
   
   if(l->s ^ s->s){   // signが異なる場合
     sub28 = lf28 - sf28;
@@ -100,7 +100,7 @@ float AddFloat(float f1, float f2){
   b.raw = f2;
   SepSEF(&a);
   SepSEF(&b);
-  if(a.e >= b.e){
+  if(a.e + a.f >= b.e + b.f){   // EFの部分を
     l = &a;
     s = &b;
   }
@@ -120,11 +120,9 @@ float SubFloat(float f1, float f2){
 }
 
 float normalize(float denf){
-  unsigned int e = GetE(denf), f = GetF(denf);
-  if(e == 0 && f != 0)
-    return 0.0;           // AddFracの場合分けのおかげで不要？
-  else if(e == emask)
-    return utof(emask);   // inf, nanはinfにしている
+  unsigned int s = GetS(denf), e = GetE(denf);
+  if(e == 0 || e == emask)
+    return utof(s + e);           // AddFracの場合分けのおかげで不要？
   else
     return denf; 
 }

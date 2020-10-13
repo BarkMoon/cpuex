@@ -4,6 +4,7 @@
 
 const unsigned int emask = ((1 << 8) - 1) << 23;
 const unsigned int fmask =  (1 << 23) - 1;
+const unsigned int efmask = emask + fmask;
 
 unsigned int ftou(float a){
   fu t;
@@ -46,6 +47,9 @@ unsigned int GetE(float a){
 
 unsigned int GetF(float a){
   return ftou(a) & fmask;
+}
+unsigned int GetEF(float a){
+  return ftou(a) & efmask;
 }
 
 void SepSEF(sef *a){

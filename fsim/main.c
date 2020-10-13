@@ -76,15 +76,15 @@ int main(){
       scanf("%d", &n);
       miss = 0;
       for(int i=0;i<n;++i){
-        a = normalize(utof((unsigned)rand()));
-        b = normalize(utof((unsigned)rand()));
+        a = normalize(utof((unsigned)rand()));    // int範囲で生成してunsignedキャストしているので正？
+        b = normalize(utof((unsigned)rand()));    //
         switch(oper){
           case ADD:
-            ans = normalize(AddFloat(a, b));
+            ans = AddFloat(a, b);
             trueans = a + b;
             break;
           case SUB:
-            ans = normalize(SubFloat(a, b));
+            ans = SubFloat(a, b);
             trueans = a - b;
             break;
         }

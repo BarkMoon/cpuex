@@ -2,10 +2,11 @@
 module fadd (
     input wire [31:0] x1,
     input wire [31:0] x2,
-    input wire ready,
+    input wire input_ready,
     output wire [31:0] y,
     output wire ovf,
-    output wire received,
+    output wire output_ready,
+    input wire received,
     input wire clk,
     input wire rstn); 
  

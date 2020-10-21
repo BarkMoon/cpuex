@@ -16,6 +16,7 @@ typedef enum{
 
 extern const unsigned int emask;
 extern const unsigned int fmask;
+extern const unsigned int efmask;
 
 unsigned int ftou(float a);
 float utof(unsigned int u);
@@ -24,5 +25,6 @@ void PrintFloatBin(float a);
 unsigned int GetS(float a);
 unsigned int GetE(float a);
 unsigned int GetF(float a);
+unsigned int GetEF(float a);
 void SepSEF(sef *a);
 unsigned int CatSEF(sef *b);

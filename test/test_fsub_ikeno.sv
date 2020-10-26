@@ -1,7 +1,7 @@
 `timescale 1ns / 100ps
 `default_nettype none
 
-module test_fadd_ikeno
+module test_fsub_ikeno
    #(parameter NSTAGE = 2)
     ();
 wire [31:0] x1,x2,y;
@@ -32,18 +32,18 @@ assign x2 = x2_reg[0];
 /*assign input_ready = irdy;
 assign received = rcvd;*/
 
-fadd u1(x1,x2,y,ovf,clk,rstn);
+fsub u1(x1,x2,y,ovf,clk,rstn);
 
 initial begin
-   // $dumpfile("test_fadd_ikeno.vcd");
+   // $dumpfile("test_fsub_ikeno.vcd");
    // $dumpvars(0);
 
-    $display("start of checking module fadd(ikeno)");
+    $display("start of checking module fsub(ikeno)");
     $display("difference message format");
     $display("x1 = [input 1(bit)], [exponent 1(decimal)]");
     $display("x2 = [input 2(bit)], [exponent 2(decimal)]");
     $display("ref. : result(float) sign(bit),exponent(decimal),mantissa(bit) overflow(bit)");
-    $display("fadd : result(float) sign(bit),exponent(decimal),mantissa(bit) overflow(bit)");
+    $display("fsub : result(float) sign(bit),exponent(decimal),mantissa(bit) overflow(bit)");
 
     #1;			//t = 1ns
     rstn = 0;
@@ -109,7 +109,7 @@ initial begin
                         		5 : m2 = {2'b10,{21{1'b1}}};
                         		6 : m2 = {23{1'b1}};
                         		default : begin
-                        			if (i==256) begin
+                        			if (i==255) begin
                         				{m2,dum2} = 0;
                         			end else begin
                         				{m2,dum2} = $urandom();
@@ -180,7 +180,7 @@ initial begin
             end
         end
 	end
-      $display("end of checking module fadd(ikeno)");
+      $display("end of checking module fsub(ikeno)");
       $finish;
 end
 
@@ -194,7 +194,7 @@ always @(posedge clk) begin
 	if (val[NSTAGE]) begin
 		fx1 = $bitstoshortreal(x1_reg[NSTAGE]);
 		fx2 = $bitstoshortreal(x2_reg[NSTAGE]);
-		fy = fx1 + fx2;
+		fy = fx1 - fx2;
 		fybit = $shortrealtobits(fy);
 		checkovf = x1_reg[NSTAGE][30:23] < 255 && x2_reg[NSTAGE][30:23] < 255;
 		if ( checkovf && fybit[30:23] == 255 ) begin

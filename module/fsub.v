@@ -1,4 +1,4 @@
-// nan, -nan以外は動きます。とりあえず。
+// x2がnan, -nan以外は動きます。とりあえず。
 
 `default_nettype none
 module fsub (
@@ -11,7 +11,7 @@ module fsub (
 
 wire [31:0] x2s;
 
-assign x2s[31] = (x2[31] == 0) ? 1 : 0;
+assign x2s[31] = ~x2[31];
 assign x2s[30:0] = x2[30:0];
 
 fadd u1(x1,x2s,y,ovf,clk,rstn);

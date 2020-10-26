@@ -4,6 +4,7 @@
 #include <string.h>
 #include "util.h"
 #include "faddsub.h"
+#include "fmul.h"
 
 int main(){
   char command[8], opc[8];
@@ -63,6 +64,30 @@ int main(){
       printf("my answer: %f\n", ans);
       PrintFloatBin(ans);
     }
+    else if(strcmp(command, "mul") == 0){
+      printf("multipling numbers: ");
+      scanf("%f %f", &a, &b);
+      PrintFloatBin(a);
+      PrintFloatBin(b);
+      printf("true answer: %f\n", a * b);
+      PrintFloatBin(a * b);
+      ans = normalize(MulFloat(a, b));
+      printf("my answer: %f\n", ans);
+      PrintFloatBin(ans);
+    }
+    else if(strcmp(command, "mulu") == 0){
+      printf("multipling numbers(uint): ");
+      scanf("%u %u", &ua, &ub);
+      a = utof(ua);
+      b = utof(ub);
+      PrintFloatBin(a);
+      PrintFloatBin(b);
+      printf("true answer: %f\n", a * b);
+      PrintFloatBin(a * b);
+      ans = normalize(MulFloat(a, b));
+      printf("my answer: %f\n", ans);
+      PrintFloatBin(ans);
+    }
     else if(strcmp(command, "rand") == 0){
       printf("Verifying opecode: ");
       scanf("%s", opc);
@@ -70,6 +95,8 @@ int main(){
         oper = ADD;
       else if(strcmp(opc, "sub") == 0)
         oper = SUB;
+      else if(strcmp(opc, "mul") == 0)
+        oper = MUL;
       else
         continue;
       printf("sample number: ");
@@ -86,6 +113,10 @@ int main(){
           case SUB:
             ans = SubFloat(a, b);
             trueans = a - b;
+            break;
+					case MUL:
+            ans = MulFloat(a, b);
+            trueans = a * b;
             break;
         }
         //printf("%f %f %f %f ", a, b, a+b, ans);

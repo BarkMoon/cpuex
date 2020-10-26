@@ -5,7 +5,7 @@ module fadd (
     input wire input_ready,
     output wire [31:0] y,
     output wire ovf,
-    output wire output_ready,
+    output reg output_ready,
     input wire received,
     input wire clk,
     input wire rstn); 
@@ -83,6 +83,8 @@ reg ssr;
 
 localparam idle = 0;
 localparam data_ready = 1;
+localparam answer_ready = 2;
+localparam wait_receive = 3;
 
 always @(posedge clk) begin
     if(~rstn) begin
@@ -101,13 +103,13 @@ always @(posedge clk) begin
         e2r <= 'b0;
     end else begin
         if(state == idle) begin
-            if(ready == 1) begin
+            output_ready <= 'b0;
+            if(input_ready == 1) begin
                 state <= data_ready;
             end
         end if(state == data_ready) begin
             x1rn <= x1;
             x2rn <= x2;
-
             esr <= es;
             myer <= mye;
             tstckr <= tstck;
@@ -118,6 +120,14 @@ always @(posedge clk) begin
             s2r <= s2;
             e2r <= e2;
             ssr <= ss;
+            state <= answer_ready;
+        end if(state == answer_ready) begin
+            output_ready <= 'b1;
+            state <= wait_receive;
+        end if(state == wait_receive) begin
+            if(received == 1) begin
+                state <= idle;
+            end
         end
     end
 end

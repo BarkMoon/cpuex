@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "util_t.h"
 
 const unsigned int emask = ((1 << 8) - 1) << 23;
@@ -48,26 +49,24 @@ void PrintULLBin(unsigned long long ull){
   printf("%s\n", bin);
 }
 
-char* PrintUIntBin_NoSpace(unsigned int u){
+void GetCharUIntBin_NoSpace(unsigned int u, char s[]){
   char bin[33];
   bin[32] = '\0';
   for(int i=31;i >= 0;i--){
     bin[i] = (u % 2) + '0';
     u >>= 1;
   }
-  printf("%s\n", bin);
-  return bin;
+  strncpy(s, bin, 33);
 }
 
-char* PrintULLBin_NoSpace(unsigned long long ull){
+void GetCharULLBin_NoSpace(unsigned long long ull, char s[]){
   char bin[65];
   bin[64] = '\0';
   for(int i=63;i >= 0;i--){
     bin[i] = (ull % 2) + '0';
     ull >>= 1;
   }
-  printf("%s\n", bin);
-  return bin;
+  strncpy(s, bin, 65);
 }
 
 void PrintFloatBin(float a){

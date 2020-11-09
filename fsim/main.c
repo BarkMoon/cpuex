@@ -14,7 +14,7 @@ int main(){
   unsigned int ua, ub;
   OPERATOR oper;
   srand((unsigned)time(NULL));
-  //LoadTable();
+  LoadTable();
   while(1){
     printf("command: ");
     scanf("%s", command);

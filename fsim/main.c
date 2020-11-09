@@ -11,7 +11,7 @@ int main(){
   char command[8], opc[8];
   int n, miss;
   float a, b, ans, trueans;
-  unsigned int ua, ub;
+  unsigned int ua, ub, uans, utrueans, diff;
   OPERATOR oper;
   srand((unsigned)time(NULL));
   LoadTable();
@@ -152,6 +152,9 @@ int main(){
         /*if(ans == a + b){
           printf("OK\n");
         }*/
+        uans = ftou(ans);
+        utrueans = ftou(trueans);
+        diff = (uans >= utrueans) ? uans - utrueans : utrueans - uans;
         if(ans != trueans && oper != INV){
           miss++;
           printf("%f %f %f %f NG\n", a, b, trueans, ans);
@@ -161,13 +164,16 @@ int main(){
           PrintFloatBin(trueans);
           PrintFloatBin(ans);
         }
-        else if(ans != trueans){
-          miss++;
-          printf("%f %f %f NG\n", a, trueans, ans);
-          printf("uint: %u\n", ftou(a));
-          PrintFloatBin(a);
-          PrintFloatBin(trueans);
-          PrintFloatBin(ans);
+        else if(ans != trueans && oper == INV){
+          printf("diff = %u\n", diff);
+          if(diff >= 5 && GetE(a) != 0 && GetE(a) != emask && GetE(trueans) != 0 && GetE(trueans) != emask){
+            miss++;
+            printf("%f %f %f NG\n", a, trueans, ans);
+            printf("uint: %u\n", ftou(a));
+            PrintFloatBin(a);
+            PrintFloatBin(trueans);
+            PrintFloatBin(ans);
+          }
         }
       }
       if(!miss)

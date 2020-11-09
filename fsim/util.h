@@ -21,6 +21,7 @@ extern const unsigned int efmask;
 unsigned int ftou(float a);
 float utof(unsigned int u);
 void PrintUIntBin(unsigned int u);
+void PrintULLBin(unsigned long long ull);
 void PrintFloatBin(float a);
 unsigned int GetS(float a);
 unsigned int GetE(float a);

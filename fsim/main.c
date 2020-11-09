@@ -14,6 +14,7 @@ int main(){
   unsigned int ua, ub;
   OPERATOR oper;
   srand((unsigned)time(NULL));
+  //LoadTable();
   while(1){
     printf("command: ");
     scanf("%s", command);
@@ -163,7 +164,7 @@ int main(){
         else if(ans != trueans){
           miss++;
           printf("%f %f %f NG\n", a, trueans, ans);
-          printf("uint: %u\n", ftou(a);
+          printf("uint: %u\n", ftou(a));
           PrintFloatBin(a);
           PrintFloatBin(trueans);
           PrintFloatBin(ans);

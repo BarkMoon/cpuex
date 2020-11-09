@@ -33,6 +33,21 @@ void PrintUIntBin(unsigned int u){
   printf("%s\n", bin);
 }
 
+void PrintULLBin(unsigned long long ull){
+  char bin[67];
+  bin[66] = '\0';
+  for(int i=65;i >= 0;i--){
+    if(i == 33 || i == 42){
+      bin[i] = ' ';
+    }
+    else{
+      bin[i] = (ull % 2) + '0';
+      ull >>= 1;
+    }
+  }
+  printf("%s\n", bin);
+}
+
 void PrintFloatBin(float a){
   PrintUIntBin(ftou(a));
 }

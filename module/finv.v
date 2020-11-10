@@ -16,15 +16,15 @@ wire [34:0] grd;
 wire [47:0] a1grd;
 wire [57:0] mtmp;
 wire [7:0] ye;
-wire [23:0] ym;
+wire [22:0] ym;
 
 finv_load_const_table u1 (a0, cst, clk);
 finv_load_grad_table u2 (a0, grd, clk);
 
-assign ye = 8'hfd - e;  //e = 254がアヤシイ
+assign ye = 253 - e;  //e = 254がアヤシイ
 assign a1grd = a1 * grd;
 assign mtmp = cst - a1grd;
-assign ym = mtmp[57:34];
+assign ym = mtmp[56:34] + mtmp[33];  //適当に丸めている
 assign y = {s, ye, ym};
 
 /*assign y = (e1r == 8'd255 && e2r!= 8'd255)? {s1r,8'd255,nzm1,m1r[21:0]}:

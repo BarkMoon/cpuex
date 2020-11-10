@@ -61,7 +61,8 @@ float InvFloat(float f){
     //PrintUIntBin((unsigned int)tmp);*/
     unsigned int A0 = a.f >> 13;
     unsigned int A1 = a.f & m_low13_mask;
-    unsigned long long mantissa = (const_table[A0] - A1 * grad_table[A0]) >> 34;
+    unsigned long long mtmp = const_table[A0] - A1 * grad_table[A0];
+    unsigned long long mantissa = (mtmp >> 34) + ((mtmp >> 33) & 1);  //適当に丸めてる。
     //printf("cst_num(*2^34), A1 * grd_num(*2^34)\n");
     //PrintULLBin(cst_num);
     //PrintULLBin((A1 * xm * xm) >> 13);

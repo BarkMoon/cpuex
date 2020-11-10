@@ -2,8 +2,8 @@
 `default_nettype none
 
 module test_finv
-    #(parameter REPEATNUM = 5,
-      parameter RANDSEED = 0) ();
+    #(parameter REPEATNUM = 1000,
+      parameter RANDSEED = 2) ();
 
 wire [31:0] x1,y;
 logic [31:0] x1i;
@@ -18,11 +18,15 @@ int          s1;
 logic [23:0] dy;
 bit [22:0] tm;
 int i;
-wire clk;
+
+logic clk;
+logic rstn;
+logic [31:0] diff;
 
 assign x1 = x1i;
+assign diff = (fybit >= y) ? fybit - y : y - fybit; 
    
-finv u1(x1,y,clk);
+finv u1(x1,y,clk,rstn);
 
 initial begin
 	// $dumpfile("test_fmul.vcd");
@@ -32,10 +36,10 @@ initial begin
     $display("difference message format");
     $display("x1 = [input 1(bit)], [exponent 1(decimal)]");
     $display("x2 = [input 2(bit)], [exponent 2(decimal)]");
-    $display("ref. : result(float) sign(bit),exponent(decimal),mantissa(bit) overflow(bit)");
-    $display("fmul : result(float) sign(bit),exponent(decimal),mantissa(bit) overflow(bit)");
+    $display("ref. : result(float) sign(bit),exponent(decimal),mantissa(bit)");
+    $display("fmul : result(float) sign(bit),exponent(decimal),mantissa(bit)");
     
-    repeat(RANDSEED) begin
+    repeat(REPEATNUM * RANDSEED) begin
         i = $urandom();
     end
 
@@ -50,14 +54,15 @@ initial begin
 
         #1;
 
-        //if (y !== fybit || ovf !== fovf) begin
+        $display("diff = %d", diff);
+        if(diff >= 5) begin
    	        $display("x = %b %b %b, %3d",
 	        x1[31], x1[30:23], x1[22:0], x1[30:23]);
    	        $display("%e %b,%3d,%b", fy,
 	        fybit[31], fybit[30:23], fybit[22:0]);
    	        $display("%e %b,%3d,%b\n", $bitstoshortreal(y),
 	        y[31], y[30:23], y[22:0]);
-        //end
+        end
     end
 
     $display("end of checking module finv");

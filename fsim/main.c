@@ -6,11 +6,13 @@
 #include "faddsub.h"
 #include "fmul.h"
 #include "finv.h"
+#include "ftoitof.h"
 
 int main(){
   char command[8], opc[8];
   int n, miss;
   float a, b, ans, trueans;
+  int a_int, ans_int, trueans_int;
   unsigned int ua, ub, uans, utrueans, diff;
   OPERATOR oper;
   srand((unsigned)time(NULL));
@@ -111,6 +113,37 @@ int main(){
       printf("my answer: %f\n", ans);
       PrintFloatBin(ans);
     }
+    else if(strcmp(command, "ftoi") == 0){
+      printf("int casting number: ");
+      scanf("%f", &a);
+      PrintFloatBin(a);
+      printf("true answer: %d\n", (int)a);
+      PrintUIntBin(itou((int)a));
+      ans_int = FloatToInt(a);
+      printf("my answer: %d\n", ans_int);
+      PrintUIntBin(itou(ans_int));
+    }
+    else if(strcmp(command, "ftoiu") == 0){
+      printf("int casting number(uint): ");
+      scanf("%u", &ua);
+      a = utof(ua);
+      PrintFloatBin(a);
+      printf("true answer: %d\n", (int)a);
+      PrintUIntBin(itou((int)a));
+      ans_int = FloatToInt(a);
+      printf("my answer: %d\n", ans_int);
+      PrintUIntBin(itou(ans_int));
+    }
+    else if(strcmp(command, "itof") == 0){
+      printf("float casting number: ");
+      scanf("%d", &a_int);
+      PrintUIntBin(itou(a_int));
+      printf("true answer: %f\n", (float)a_int);
+      PrintFloatBin((float)a_int);
+      ans = IntToFloat(a_int);
+      printf("my answer: %f\n", ans);
+      PrintFloatBin(ans);
+    }
     else if(strcmp(command, "rand") == 0){
       printf("Verifying opecode: ");
       scanf("%s", opc);
@@ -122,14 +155,26 @@ int main(){
         oper = MUL;
       else if(strcmp(opc, "inv") == 0)
         oper = INV;
+      else if(strcmp(opc, "ftoi") == 0)
+        oper = FTOI;
+      else if(strcmp(opc, "itof") == 0)
+        oper = ITOF;
       else
         continue;
       printf("sample number: ");
       scanf("%d", &n);
       miss = 0;
       for(int i=0;i<n;++i){
-        a = normalize(utof((unsigned)rand()));    // int範囲で生成してunsignedキャストしているので正？
-        b = normalize(utof((unsigned)rand()));    //
+        if(oper == ADD || oper == SUB || oper == MUL){
+          a = normalize(utof((unsigned)rand()));    // int範囲で生成してunsignedキャストしているので正？
+          b = normalize(utof((unsigned)rand()));    //
+        }
+        else if(oper == INV || oper == FTOI){
+          a = normalize(utof((unsigned)rand()));
+        }
+        else if(oper == ITOF){
+          a_int = rand();
+        }
         switch(oper){
           case ADD:
             ans = AddFloat(a, b);
@@ -147,15 +192,30 @@ int main(){
             ans = InvFloat(a);
             trueans = 1 / a;
             break;
+          case FTOI:
+            ans_int = FloatToInt(a);
+            trueans_int = (int)a;
+            break;
+          case ITOF:
+            ans = IntToFloat(a_int);
+            trueans = (float)a_int;
+            break;
         }
         //printf("%f %f %f %f ", a, b, a+b, ans);
         /*if(ans == a + b){
           printf("OK\n");
         }*/
-        uans = ftou(ans);
-        utrueans = ftou(trueans);
+        if(oper == FTOI){
+          uans = itou(ans_int);
+          utrueans = itou(trueans_int);
+        }
+        else{
+          uans = ftou(ans);
+          utrueans = ftou(trueans);
+        }
         diff = (uans >= utrueans) ? uans - utrueans : utrueans - uans;
-        if(ans != trueans && oper != INV){
+        printf("diff = %u\n", diff);
+        if(ans != trueans && (oper == ADD || oper == SUB || oper == MUL)){
           miss++;
           printf("%f %f %f %f NG\n", a, b, trueans, ans);
           printf("uint: %u %u\n", ftou(a), ftou(b));
@@ -164,13 +224,31 @@ int main(){
           PrintFloatBin(trueans);
           PrintFloatBin(ans);
         }
-        else if(ans != trueans && oper == INV){
-          printf("diff = %u\n", diff);
-          if(diff >= 5 && GetE(a) != 0 && GetE(a) != emask && GetE(trueans) != 0 && GetE(trueans) != emask){
+        if(ans != trueans && oper == INV){
+          if(diff >= 4 && GetE(a) != 0 && GetE(a) != emask && GetE(trueans) != 0 && GetE(trueans) != emask){
             miss++;
             printf("%f %f %f NG\n", a, trueans, ans);
             printf("uint: %u\n", ftou(a));
             PrintFloatBin(a);
+            PrintFloatBin(trueans);
+            PrintFloatBin(ans);
+          }
+        }
+        if(ans_int != trueans_int && oper == FTOI){
+          if(diff >= 1 && trueans_int != -2147483648){
+            miss++;
+            printf("%f %d %d NG\n", a, trueans_int, ans_int);
+            printf("uint: %u\n", ftou(a));
+            PrintFloatBin(a);
+            PrintUIntBin(itou(trueans_int));
+            PrintUIntBin(itou(ans_int));
+          }
+        }
+        if(ans != trueans && oper == ITOF){
+          if(abs(a_int - (int)trueans) < abs(a_int - (int)ans)){
+            miss++;
+            printf("%d %f %f NG\n", a_int, trueans, ans);
+            PrintUIntBin(itou(a_int));
             PrintFloatBin(trueans);
             PrintFloatBin(ans);
           }

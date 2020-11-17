@@ -5,9 +5,9 @@ module fmul (
     input wire [31:0] x1,
     input wire [31:0] x2,
     output wire [31:0] y,
-    //output wire ovf,
+    output wire ovf,
     input wire clk,
-    input wire rstn); 
+    input wire rstn);
  
 //reg[31:0] x1rn;
 //reg[31:0] x2rn;

@@ -1,5 +1,5 @@
 `default_nettype none
-module ftoi (
+module itof (
     input wire [31:0] x,
     output wire [31:0] y,
     input wire clk,
@@ -10,6 +10,7 @@ wire s = x[31];     // 答えのsignビットはxの正負=x[31]に一致。
 //wire [22:0] m;
 wire [31:0] absx = (s == 0) ? x : (~x) + 1'b1;      // 負の最大値1000...0の時に1000...0になることに注意。
 
+// 1/2ulpが1(つまり、(ulp以下)≧1/2)なら切り上げ。実際には最近接偶数丸めを行っているっぽい。
 assign y =  (absx[30] == 1) ? {s, 8'b10011101, absx[29:7]} + absx[6] :
             (absx[29] == 1) ? {s, 8'b10011100, absx[28:6]} + absx[5] :
             (absx[28] == 1) ? {s, 8'b10011011, absx[27:5]} + absx[4] :

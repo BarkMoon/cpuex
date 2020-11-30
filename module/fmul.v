@@ -71,9 +71,15 @@ wire [22:0] ym = (ye == 255 || ye == 0) ? 0 : ym0r;
 
 always @(posedge clk) begin
     if(~rstn) begin
+        x1r[0] <= 'b0;
+        x2r[0] <= 'b0;
         hhr <= 'b0;
         hlr <= 'b0;
         lhr <= 'b0;
+        ysr <= 'b0;
+        mmulr <= 'b0;
+        ym0r <= 'b0
+        ye0r <= 'b0;
     end else begin
         x1r[0] <= x1;
         x2r[0] <= x2;

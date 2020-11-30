@@ -78,7 +78,7 @@ always @(posedge clk) begin
         lhr <= 'b0;
         ysr <= 'b0;
         mmulr <= 'b0;
-        ym0r <= 'b0
+        ym0r <= 'b0;
         ye0r <= 'b0;
     end else begin
         x1r[0] <= x1;

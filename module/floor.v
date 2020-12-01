@@ -7,7 +7,7 @@ module floor #(parameter NSTAGE = 2)(
 
 // stage = 0 (x)
 
-// stage = 1 (xr[0] -> mni, restbit)
+// stage = 1 (xr[0] -> mni, restbit, xep)
 
 reg [31:0] xr[1:0];
 
@@ -62,16 +62,19 @@ wire [23:0] restbit =   (e <= 8'b01111111) ? {|(m[22:0]), 23'b0} :
                         (e == 8'b10010100) ? {21'b0, |(m[1:0]), 2'b0} :
                         (e == 8'b10010101) ? {22'b0, m[0], 1'b0} : 24'b0;
 
-// stage = 2 (mnir, restbitr -> y)
+wire [7:0] xep = (e < 8'b01111111) ? 8'b0 : e;
+
+// stage = 2 (mnir, restbitr, xepr -> y)
 
 reg [31:0] mnir;
 reg [23:0] restbitr;
+reg [7:0] xepr;
 
 wire ys = xr[1][31];
 
 wire [23:0] mp = (ys) ? mnir + restbitr : mnir;
 
-wire [8:0] ep = xr[1][30:23] + mp[23];
+wire [8:0] ep = (xepr == 8'b0) ? ((mp[23]) ? 9'b001111111 : 9'b000000000) : xepr + mp[23];
 
 wire [7:0] ye = ep[7:0];
 wire [22:0] ym = (mp[23]) ? {1'b0, mp[22:1]} : mp[22:0];
@@ -81,10 +84,12 @@ always @(posedge clk) begin
         xr[0] <= 'b0;
         mnir <= 'b0;
         restbitr <= 'b0;
+        xepr <= 'b0;
     end else begin
         xr[0] <= x;
         mnir <= mni;
         restbitr <= restbit;
+        xepr <= xep;
     end
 end
 

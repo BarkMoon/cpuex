@@ -94,10 +94,10 @@ always @(posedge clk) begin
         $display("diff = %d", diff);
         //if(diff >= 1) begin
    	        $display("x = %b, %d",
-	        x1_reg[NSTAGE], absx);
-   	        $display("%e %b,%3d,%b", fy,
+	        x1_reg[NSTAGE], $signed(x1_reg[NSTAGE]));
+   	        $display("%.15f %b,%3d,%b", fy,
 	        fybit[31], fybit[30:23], fybit[22:0]);
-   	        $display("%e %b,%3d,%b\n", $bitstoshortreal(y),
+   	        $display("%.15f %b,%3d,%b\n", $bitstoshortreal(y),
 	        y[31], y[30:23], y[22:0]);
         //end
     end

@@ -67,6 +67,13 @@ wire inc =  (absxr[30] == 1) ? absxr[6] :
 reg [31:0] ynir;
 reg incr;
 
+wire [23:0] mp = ynir[22:0] + incr;
+wire [8:0] ep = /*(ynir == 8'b0) ? ((mp[23]) ? 9'b001111111 : 9'b0) : */ynir[30:23] + mp[23];
+
+wire ys = ynir[31];
+wire [7:0] ye = ep[7:0];
+wire [22:0] ym = (mp[23]) ? {1'b0, mp[22:1]} : mp[22:0];
+
 always @(posedge clk) begin
     if(~rstn) begin
         xr[0] <= 'b0;
@@ -83,7 +90,7 @@ always @(posedge clk) begin
     end
 end
 
-assign y = ynir + incr;
+assign y = {ys, ye, ym};
 
 endmodule
 `default_nettype wire

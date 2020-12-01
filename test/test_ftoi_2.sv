@@ -3,14 +3,16 @@
 
 module test_ftoi
     #(parameter NSTAGE = 3,
-      parameter REPEATNUM = 50,
+      parameter REPEATNUM = 100,
       parameter RANDSEED = 2) ();
 
-wire [31:0] x1,y;
+wire [31:0] x1;
+wire signed [31:0] y;
 //logic [31:0] x1i,x2i;
+logic [31:0] xem;
 shortreal    fx1,floor;
 int ri;
-logic [31:0] fybit;
+logic signed [31:0] fybit;
 
 logic clk, rstn;
 int i, diff;
@@ -51,6 +53,8 @@ initial begin
     end
 
     repeat(REPEATNUM) begin
+        //xem = $urandom();
+        //x1_reg[0] <= {1'b1, xem[30:0]};
         x1_reg[0] <= $urandom();
         val[0] <= 1;
 
@@ -96,8 +100,8 @@ always @(posedge clk) begin
         diff = (fybit >= y) ? fybit - y : y - fybit;
         $display("diff = %d", diff);
         //if(diff >= 1) begin
-   	        $display("x = %b %b %b, %3d",
-	        x1_reg[NSTAGE][31], x1_reg[NSTAGE][30:23], x1_reg[NSTAGE][22:0], x1_reg[NSTAGE][30:23]);
+   	        $display("x = %b %b %b, %3d %.15f",
+	        x1_reg[NSTAGE][31], x1_reg[NSTAGE][30:23], x1_reg[NSTAGE][22:0], x1_reg[NSTAGE][30:23], fx1);
    	        $display("%d %b", fybit, fybit);
    	        $display("%d %b\n", y, y);
         //end

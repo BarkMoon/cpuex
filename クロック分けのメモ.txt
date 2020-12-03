@@ -9,3 +9,11 @@ fdiv
 x2	x2r				x2inv	x2invr
 	finv 0	finv 1	finv 2	finv 3	finv 4	
 						fmul 0	fmul 1	fmul 2	fmul 3
+
+FPU fadd
+0	1	2	3
+en		
+count 2	1	0	0
+ready 0	0	1	0		
+fadd 0	fadd 1	fadd 2
+wait 0	1	2	3

@@ -84,7 +84,7 @@ module FPU(clk, rstn, ctl, x1, x2, y, ready, en);
                 count <= FNEG_NSTAGE;
                 ready <= 0;
             end
-        end else if (count == 1) begin
+        end else if (count == 1) begin  // enに対してelseしているので、readyを待たないでも動くようにするにはelseを外しましょう。
             if(fadd) begin
                 y <= fadd_y;
             end else if (fsub) begin

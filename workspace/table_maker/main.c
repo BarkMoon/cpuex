@@ -113,10 +113,10 @@ int main(){
 				char upper_grd_bit[65], lower_grd_bit[65];
 				GetCharULLBin_NoSpace(upper_cst, upper_cst_bit);
 				GetCharULLBin_NoSpace(lower_cst, lower_cst_bit);
-				fprintf(cfp, "\tram[%d] = %d'b%s %s;\n", i, 128, upper_cst_bit, lower_cst_bit);
+				fprintf(cfp, "\tram[%d] = %d'b%s%s;\n", i, 128 - 46, &upper_cst_bit[46], lower_cst_bit);
 				GetCharULLBin_NoSpace(upper_grd, upper_grd_bit);
 				GetCharULLBin_NoSpace(lower_grd, lower_grd_bit);
-				fprintf(gfp, "\tram[%d] = %d'b%s%s;\n", i, 128, upper_grd_bit, lower_grd_bit);
+				fprintf(gfp, "\tram[%d] = %d'b%s%s;\n", i, 128 - 57, &upper_grd_bit[57], lower_grd_bit);
 			}
 		}
 	}

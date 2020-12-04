@@ -5,11 +5,14 @@ module floor #(parameter NSTAGE = 2)(
     input wire clk,
     input wire rstn);
 
-// stage = 0 (x -> s, mni, restbit, xep)
+// stage = 0 (x)
 
-wire s = x[31];
-wire [7:0] e = x[30:23];
-wire [22:0] m = x[22:0];
+// stage = 1 (xr[0] -> mni, restbit, xep)
+
+reg [31:0] xr[1:0];
+
+wire [7:0] e = xr[0][30:23];
+wire [22:0] m = xr[0][22:0];
 
 wire [23:0] mni =   (e <= 8'b01111111) ? 24'b0 :
                     (e == 8'b10000000) ? {1'b0, m[22], 22'b0} :
@@ -61,14 +64,13 @@ wire [23:0] restbit =   (e <= 8'b01111111) ? {|(m[22:0]), 23'b0} :
 
 wire [7:0] xep = (e < 8'b01111111) ? 8'b0 : e;
 
-// stage = 1 (mnir, restbitr, xepr -> y)
+// stage = 2 (mnir, restbitr, xepr -> y)
 
-reg [31:0] sr;
 reg [31:0] mnir;
 reg [23:0] restbitr;
 reg [7:0] xepr;
 
-wire ys = sr;
+wire ys = xr[1][31];
 
 wire [23:0] mp = (ys) ? mnir + restbitr : mnir;
 
@@ -79,16 +81,20 @@ wire [22:0] ym = (mp[23]) ? {1'b0, mp[22:1]} : mp[22:0];
 
 always @(posedge clk) begin
     if(~rstn) begin
-        sr <= 'b0;
+        xr[0] <= 'b0;
         mnir <= 'b0;
         restbitr <= 'b0;
         xepr <= 'b0;
     end else begin
-        sr <= s;
+        xr[0] <= x;
         mnir <= mni;
         restbitr <= restbit;
         xepr <= xep;
     end
+end
+
+always @(posedge clk) begin
+    xr[1] <= xr[0];
 end
 
 assign y = {ys, ye, ym};

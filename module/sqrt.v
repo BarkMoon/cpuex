@@ -53,6 +53,8 @@ wire [71:0] tsqmcoe = tsqmulmr * coemp1;
 
 reg [71:0] tsqmcoer;
 
+wire iszero = ~(|xr[4][30:23]);
+
 wire ys = 0;
 wire [8:0] ye2 = (xr[4][23]) ? xr[4][30:23] + 127 : xr[4][30:23] + 126;
 wire [7:0] ye = ye2[8:1];
@@ -83,7 +85,7 @@ always @(posedge clk) begin
     cstr[1] <= cstr[0];
 end
 
-assign y = {ys, ye, ym};
+assign y = (iszero) ? 32'b0 : {ys, ye, ym};
 
 endmodule
 `default_nettype wire

@@ -14,8 +14,8 @@ logic clk, rstn;
 int i, diff;
 logic [31:0] r, x1d;
 
-logic [31:0]	x1_reg[NSTAGE:0];
-logic 	val[NSTAGE:0];
+logic [31:0] x1_reg[NSTAGE:0];
+logic val[NSTAGE:0];
 
 assign x1 = x1_reg[0];
 

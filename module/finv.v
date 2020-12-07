@@ -50,20 +50,18 @@ wire [22:0] ym = (m == 0) ? 23'b0 : mtmpr[56:34] + mtmpr[33];  //適当に丸め
 always @(posedge clk) begin
     if(~rstn) begin
         xr[0] <= 'b0;
+        xr[1] <= 'b0;
+        xr[2] <= 'b0;
         cstr <= 'b0;
         a1grdr <= 'b0;
         mtmpr <= 'b0;
     end else begin
         xr[0] <= x;
+        xr[2:1] <= xr[1:0];
         cstr <= cst;
         a1grdr <= a1grd;
         mtmpr <= mtmp;
     end
-end
-
-always @(posedge clk) begin
-    xr[2:1] <= xr[1:0];
-    cstr[1] <= cstr[0];
 end
 
 assign y =  (iszero) ? {ys, 8'b11111111, 23'b0} :

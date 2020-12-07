@@ -10,6 +10,7 @@ always @(posedge clk) begin
     cst <= ram[addr];
 end
 //assign cst = ram[addr];
+
 initial begin
 	ram[0] = 58'b1111111111111111111111000000000111111111110000000000000000;
 	ram[1] = 58'b1111111111000000000011000000000100000001001111100111000000;
@@ -1049,6 +1050,7 @@ always @(posedge clk) begin
     grd <= ram[addr];
 end
 //assign grd = ram[addr];
+
 initial begin
 	ram[0] = 35'b11111111110000000001001111111110000;
 	ram[1] = 35'b11111111010000000111001111100010000;

@@ -2,6 +2,13 @@
 fmul NSTAGE=3
 ～x1, x2 → hh, hl, lh → ym0 → ovf, y～
 
+finv
+0	1	2	3
+x	cst	mtmp	y
+	grd
+	a1grd
+
+
 fdiv
 ～x1, x2 → finv → fmul → y～
 

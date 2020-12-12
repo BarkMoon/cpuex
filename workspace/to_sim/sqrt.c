@@ -31,7 +31,7 @@ void SqrtLoadTable(){
   fclose(fp);
 }
 
-float sqrt(float f){
+float SqrtFloat(float f){
   sef a, ans;
   a.raw = f;
   SepSEF(&a);

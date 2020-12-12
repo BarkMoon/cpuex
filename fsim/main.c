@@ -9,6 +9,7 @@
 #include "finv.h"
 #include "fdiv.h"
 #include "ftoitof.h"
+#include "floor.h"
 #include "sqrt.h"
 
 int main(){
@@ -182,27 +183,27 @@ int main(){
       printf("my answer: %f\n", ans);
       PrintFloatBin(ans);
     }
-    /*else if(strcmp(command, "floor") == 0){
-      printf("Inverting number: ");
+    else if(strcmp(command, "floor") == 0){
+      printf("Floor number: ");
       scanf("%f", &a);
       PrintFloatBin(a);
-      printf("true answer: %f\n", ()a);
-      PrintFloatBin(1 / a);
-      ans = normalize(InvFloat(a));
+      printf("true answer: %f\n", (float)floor(a));
+      PrintFloatBin((float)floor(a));
+      ans = normalize(FloorFloat(a));
       printf("my answer: %f\n", ans);
       PrintFloatBin(ans);
     }
     else if(strcmp(command, "flooru") == 0){
-      printf("inverting number(uint): ");
+      printf("Floor number(uint): ");
       scanf("%u", &ua);
       a = utof(ua);
       PrintFloatBin(a);
-      printf("true answer: %f\n", 1 / a);
-      PrintFloatBin(1 / a);
-      ans = normalize(InvFloat(a));
+      printf("true answer: %f\n", (float)floor(a));
+      PrintFloatBin((float)floor(a));
+      ans = normalize(FloorFloat(a));
       printf("my answer: %f\n", ans);
       PrintFloatBin(ans);
-    }*/
+    }
     else if(strcmp(command, "sqrt") == 0){
       printf("square rooting number: ");
       scanf("%f", &a);

@@ -6,7 +6,7 @@
 const int f24high = ((1 << 13) - 1) << 11;
 const int f24low = (1 << 11) - 1;
 
-float fmul(float f1, float f2){
+float MulFloat(float f1, float f2){
   sef a, b, ans;
   a.raw = f1;
   b.raw = f2;

@@ -1,4 +1,4 @@
 #pragma once
 
-int ftoi(float a);
-float itof(int i);
+int FloatToInt(float a);
+float IntToFloat(int i);

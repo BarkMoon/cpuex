@@ -1,3 +1,3 @@
 #pragma once
 
-float fmul(float f1, float f2);
+float MulFloat(float f1, float f2);

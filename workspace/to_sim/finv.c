@@ -3,7 +3,6 @@
 #include "util.h"
 #include "finv.h"
 
-//const unsigned int m_high10_mask = ((1 << 10) - 1) << 13;
 const unsigned int m_low13_mask = (1 << 13) - 1;
 
 unsigned long long const_table[1024];
@@ -21,7 +20,7 @@ void LoadTable(){
   fclose(fp);
 }
 
-float finv(float f){
+float InvFloat(float f){
   sef a, ans;
   a.raw = f;
   SepSEF(&a);
@@ -36,7 +35,7 @@ float finv(float f){
     unsigned int A0 = a.f >> 13;
     unsigned int A1 = a.f & m_low13_mask;
     unsigned long long mtmp = const_table[A0] - A1 * grad_table[A0];
-    unsigned long long mantissa = (mtmp >> 34) + ((mtmp >> 33) & 1);  //適当に丸めてる。
+    unsigned long long mantissa = (mtmp >> 34) + ((mtmp >> 33) & 1);
     
     if(a.e == 0){
       ans.s = a.s;

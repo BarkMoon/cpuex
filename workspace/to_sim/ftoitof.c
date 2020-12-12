@@ -3,7 +3,7 @@
 #include "util.h"
 #include "ftoitof.h"
 
-int FloatToInt(float f){
+int ftoi(float f){
   int i = (int)f;
   if(i == (1 << 31)){
     return i;
@@ -18,7 +18,7 @@ int FloatToInt(float f){
     return i;
   }
 }
-float IntToFloat(int i){
+float itof(int i){
   sef ans;
   unsigned int u = (i>=0) ? i : -i;
   int top = 0;

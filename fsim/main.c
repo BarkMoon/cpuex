@@ -17,6 +17,7 @@ int main(){
   float a, b, ans, trueans;
   int a_int, ans_int, trueans_int;
   unsigned int ua, ub, uans, utrueans, diff;
+  int temp_int;
   OPERATOR oper;
   srand((unsigned)time(NULL));
   LoadTable();
@@ -145,8 +146,17 @@ int main(){
       printf("int casting number: ");
       scanf("%f", &a);
       PrintFloatBin(a);
-      printf("true answer: %d\n", (int)a);
-      PrintUIntBin(itou((int)a));
+      temp_int = (int)a;
+      if(temp_int == (1 << 31))
+        trueans_int = temp_int;
+      else if(a - (float)temp_int >= 0.5)
+        trueans_int = temp_int+1;
+      else if(a - (float)temp_int <= -0.5)
+        trueans_int = temp_int-1;
+      else
+        trueans_int = temp_int;
+      printf("true answer: %d\n", trueans_int);
+      PrintUIntBin(itou(trueans_int));
       ans_int = FloatToInt(a);
       printf("my answer: %d\n", ans_int);
       PrintUIntBin(itou(ans_int));
@@ -172,6 +182,27 @@ int main(){
       printf("my answer: %f\n", ans);
       PrintFloatBin(ans);
     }
+    /*else if(strcmp(command, "floor") == 0){
+      printf("Inverting number: ");
+      scanf("%f", &a);
+      PrintFloatBin(a);
+      printf("true answer: %f\n", ()a);
+      PrintFloatBin(1 / a);
+      ans = normalize(InvFloat(a));
+      printf("my answer: %f\n", ans);
+      PrintFloatBin(ans);
+    }
+    else if(strcmp(command, "flooru") == 0){
+      printf("inverting number(uint): ");
+      scanf("%u", &ua);
+      a = utof(ua);
+      PrintFloatBin(a);
+      printf("true answer: %f\n", 1 / a);
+      PrintFloatBin(1 / a);
+      ans = normalize(InvFloat(a));
+      printf("my answer: %f\n", ans);
+      PrintFloatBin(ans);
+    }*/
     else if(strcmp(command, "sqrt") == 0){
       printf("square rooting number: ");
       scanf("%f", &a);
@@ -251,7 +282,15 @@ int main(){
             break;
           case FTOI:
             ans_int = FloatToInt(a);
-            trueans_int = (int)a;
+            temp_int = (int)a;
+            if(temp_int == (1 << 31))
+              trueans_int = temp_int;
+            else if(a - (float)temp_int >= 0.5)
+              trueans_int = temp_int+1;
+            else if(a - (float)temp_int <= -0.5)
+              trueans_int = temp_int-1;
+            else
+              trueans_int = temp_int;
             break;
           case ITOF:
             ans = IntToFloat(a_int);

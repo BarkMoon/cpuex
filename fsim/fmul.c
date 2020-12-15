@@ -48,11 +48,12 @@ float MulFloat(float f1, float f2){
 	// ans.f = RN(mult << 2, &ans.e);
 	// とかだが、それでも精度が上がるわけでもない。
 
-	if((ans.e & (1 << 31)) > 0){
-    ans.e = emask;
+	if(ans.e >= (255 << 23)){
+    	ans.e = emask;
 		ans.f = 0;
-		CatSEF(&ans);
-  	return ans.raw;
+	}
+	else if(ans.e < (1 << 23)){
+		ans.f = 0;
 	}
 
 	/*printf("debug<3\n");

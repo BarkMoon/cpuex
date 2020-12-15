@@ -43,11 +43,12 @@ float MulFloat(float f1, float f2){
 	ans.e += (1 << 23) * (top-24);
 	ans.f = (mult >> (top-23)) & fmask;  // top < 23は起こり得ない。24, 25のみ
 
-	if((ans.e & (1 << 31)) > 0){
+	if(ans.e >= (255 << 23)){
     ans.e = emask;
 		ans.f = 0;
-		CatSEF(&ans);
-  	return ans.raw;
+	}
+	else if(ans.e < (1 << 23)){
+		ans.f = 0;
 	}
 
 	CatSEF(&ans);

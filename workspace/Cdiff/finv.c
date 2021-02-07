@@ -6,18 +6,18 @@
 //const unsigned int m_high10_mask = ((1 << 10) - 1) << 13;
 const unsigned int m_low13_mask = (1 << 13) - 1;
 
-unsigned long long const_table[1024];
-unsigned long long grad_table[1024];
+unsigned long long finv_const_table[1024];
+unsigned long long finv_grad_table[1024];
 
 void LoadTable(){
   FILE *fp;
   fp = fopen("finv_const_table.txt", "r");
   for(int i=0;i<1024;++i)
-    fscanf(fp, "%llu", &const_table[i]);
+    fscanf(fp, "%llu", &finv_const_table[i]);
   fclose(fp);
   fp = fopen("finv_grad_table.txt", "r");
   for(int i=0;i<1024;++i)
-    fscanf(fp, "%llu", &grad_table[i]);
+    fscanf(fp, "%llu", &finv_grad_table[i]);
   fclose(fp);
 }
 
@@ -60,7 +60,7 @@ float InvFloat(float f){
     //PrintUIntBin((unsigned int)tmp);*/
     unsigned int A0 = a.f >> 13;
     unsigned int A1 = a.f & m_low13_mask;
-    unsigned long long mtmp = const_table[A0] - A1 * grad_table[A0];
+    unsigned long long mtmp = finv_const_table[A0] - A1 * finv_grad_table[A0];
     unsigned long long mantissa = (mtmp >> 34) + ((mtmp >> 33) & 1);  //適当に丸めてる。
     //printf("cst_num(*2^34), A1 * grd_num(*2^34)\n");
     //PrintULLBin(cst_num);

@@ -37,6 +37,7 @@ float SqrtFloat(float f){
   unsigned int aet = (a.e >> 23);
   unsigned int A0 = a.f >> 13;
   unsigned int A1 = a.f & m_low13_mask_s;
+  //printf("%u\n", A0);
   //printf("%lu %lu\n", (uint64_t)(sqrt_const_table[A0] >> 64), (uint64_t)sqrt_const_table[A0]);
   uint128_t mtmp = (sqrt_const_table[A0] << 13) - A1 * sqrt_grad_table[A0];
   uint128_t mantissa = (mtmp >> 71) + ((mtmp >> 70) & 1);  //適当に丸めてる。
@@ -50,23 +51,4 @@ float SqrtFloat(float f){
   ans.f = (aet % 2 == 1 && (a.f >> 1) == 0) ? 0 : f2;
   CatSEF(&ans);
   return ans.raw;
-  /*sef a, ans, tsq, am;
-  a.raw = f;
-  SepSEF(&a);
-  unsigned int aet = (a.e >> 23);
-  am.s = tsq.s = 0;
-  am.e = tsq.e = (127 << 23);
-  am.f = a.f;
-  CatSEF(&am);
-  unsigned int A0 = a.f >> 13;
-  unsigned int A1 = a.f & m_low13_mask_s;
-  uint128_t mtmp = (sqrt_const_table[A0] << 13) - A1 * sqrt_grad_table[A0];
-  uint128_t mantissa = (mtmp >> 71) + ((mtmp >> 70) & 1);  //適当に丸めてる。
-  tsq.f = (unsigned int)(mantissa & fmask);
-  CatSEF(&tsq);
-  ans.raw = (aet % 2 == 1) ? (tsq.raw * am.raw * (float)sqrt(2.0)) / 2 : tsq.raw * am.raw;
-  SepSEF(&ans);
-  ans.e = (aet % 2 == 1) ? ((127 + (aet-127) / 2) << 23) : ((127 + (aet-128) / 2) << 23);
-  CatSEF(&ans);
-  return ans.raw;*/
 }

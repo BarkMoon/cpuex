@@ -1,5 +1,5 @@
 `default_nettype none
-module fadd #(NSTAGE = 2)(
+module fadd #(NSTAGE = 4)(
     input wire [31:0] x1,
     input wire [31:0] x2,
     output wire [31:0] y,
@@ -13,6 +13,9 @@ wire [31:0] lx = (x1[30:0] >= x2[30:0]) ? x1 : x2;
 wire [31:0] sx = (x1[30:0] >= x2[30:0]) ? x2 : x1;
 
 // stage = 1 (lxr[0], sxr[0] -> lf25, sf25)
+
+reg [31:0] lxr[3:0];
+reg [31:0] sxr[1:0];
 
 wire [7:0] shift = lxr[0][30:23] - sxr[0][30:23];
 wire [25:0] lf25 = {1'b1, lxr[0][22:0], 2'b00};
@@ -46,8 +49,6 @@ wire [25:0] sf25 =  (shift == 0) ? {sfp1, 2'b00} :
 
 // stage = 2 (lxr[1], sxr[1], lf25r, sf25r -> afnc, inc, top)
 
-reg [31:0] lxr[3:0];
-reg [31:0] sxr[1:0];
 reg [25:0] lf25r, sf25r;
 
 wire [26:0] af26 = (lxr[1][31]^sxr[1][31]) ? lf25r - sf25r : lf25r + sf25r;
@@ -130,7 +131,7 @@ wire ys = lxr[3][31];
 wire [7:0] ye = (aer[8]) ? ((ttopr >= 25) ? 8'b11111111 : 8'b0) : aer[7:0];
 wire [22:0] yf = (ye == 8'b0 || ye == 8'b11111111) ? 23'b0 : afr[22:0];
 
-assign y = (&lxr[3][30:23]) ? lxr[2] : {ys, ye, yf};
+assign y = (&lxr[3][30:23]) ? lxr[3] : {ys, ye, yf};
 assign ovf = (ye == 8'b0 || ye == 8'b11111111) && (|afr[22:0]);
 
 always @(posedge clk) begin

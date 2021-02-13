@@ -1,5 +1,5 @@
 `default_nettype none
-module fadd #(NSTAGE = 1)(
+module fadd #(NSTAGE = 2)(
     input wire [31:0] x1,
     input wire [31:0] x2,
     output wire [31:0] y,
@@ -7,10 +7,11 @@ module fadd #(NSTAGE = 1)(
     input wire clk,
     input wire rstn); 
 
-// stage = 0 (x1, x2 -> es, ss, tstck, mye)
+// stage = 0 (x1, x2 -> lx, sx, lf25, sf25)
 
-//reg [31:0] x1r;
-//reg [31:0] x2r;
+reg [31:0] lxr[1:0];
+reg [31:0] sxr;
+reg [25:0] lf25r, sf25r;
 
 wire [31:0] lx = (x1[30:0] >= x2[30:0]) ? x1 : x2;
 wire [31:0] sx = (x1[30:0] >= x2[30:0]) ? x2 : x1;
@@ -22,10 +23,17 @@ wire [25:0] sf25 =  (shift >= 24) ? 26'b0 :
                     (shift == 0) ? {sfp1, 2'b00} :
                     (shift == 1) ? {1'b0, sfp1, 1'b0}:
                         {2'b00, (sfp1 >> (shift - 2))};
-wire [26:0] af26 = (lx[31]^sx[31]) ? lf25 - sf25 : lf25 + sf25;
-wire inc =  (af[26]) ? af26[2] :
-            (af[25]) ? af26[1] :
-            (af[24]) ? af[0] : 0;
+
+// stage = 1 (lxr[0], sxr, lf25r, sf25r -> afnc, inc, top)
+
+reg [23:0] afncr;
+reg incr;
+reg [4:0] topr;
+
+wire [26:0] af26 = (lxr[0][31]^sxr[31]) ? lf25r - sf25r : lf25r + sf25r;
+wire inc =  (af26[26]) ? af26[2] :
+            (af26[25]) ? af26[1] :
+            (af26[24]) ? af26[0] : 0;
 wire [23:0] afnc =  (af26[26]) ? af26[26:3] :
                     (af26[25]) ? af26[25:2] :
                     (af26[24]) ? af26[24:1] :
@@ -82,34 +90,39 @@ wire [4:0] top =    (af26[26]) ? 26 :
                     (af26[1]) ? 1 :
                     (af26[0]) ? 0 : 0;
 
-wire [24:0] af = afnc + inc;
-wire [4:0] ttop = top + af[24];
-wire [8:0] ae = lx[30:23] + ttop - 25;
+// stage = 2 (lxr[1], afncr, incr, topr -> y, ovf)
 
-wire ys = lx[31];
+wire [24:0] af = afncr + incr;
+wire [4:0] ttop = topr + af[24];
+wire [8:0] ae = lxr[1][30:23] + ttop - 25;
+
+wire ys = lxr[1][31];
 wire [7:0] ye = (ae[8]) ? ((ttop >= 25) ? 8'b11111111 : 8'b0) : ae[7:0];
 wire [22:0] yf = (ye == 8'b0 || ye == 8'b11111111) ? 23'b0 : af[22:0];
 
-assign y = {ys, ye, yf};
+assign y = (&lxr[1][30:23]) ? lxr[1] : {ys, ye, yf};
 assign ovf = (ye == 8'b0 || ye == 8'b11111111) && (|af[22:0]);
-/*
+
 always @(posedge clk) begin
     if(~rstn) begin
-        x1r <= 'b0;
-        x2r <= 'b0;
-        esr <= 'b0;
-        ssr <= 'b0;
-        myer <= 'b0;
-        tstckr <= 'b0;
+        lxr[0] <= 'b0;
+        sxr <= 'b0;
+        lf25r <= 'b0;
+        sf25r <= 'b0;
+        afncr <= 'b0;
+        incr <= 'b0;
+        topr <= 'b0;
     end else begin
-        x1r <= x1;
-        x2r <= x2;
-        esr <= es;
-        ssr <= ss;
-        myer <= mye;
-        tstckr <= tstck;
+        lxr[0] <= lx;
+        lxr[1] <= lxr[0];
+        sxr <= sx;
+        lf25r <= lf25;
+        sf25r <= sf25;
+        afncr <= afnc;
+        incr <= inc;
+        topr <= top;
     end
-end*/
+end
 
 /*assign y = (e1r == 8'd255 && e2r!= 8'd255)? {s1r,8'd255,nzm1,m1r[21:0]}:
                       (e1r != 8'd255 && e2r== 8'd255)? {s2r,8'd255,nzm2,m2r[21:0]}:

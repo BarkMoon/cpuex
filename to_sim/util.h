@@ -16,7 +16,7 @@ typedef struct{
 }sef;
 
 typedef enum{
-  ADD, SUB, MUL, INV, DIV, FTOI, ITOF, SQRT
+  ADD, SUB, MUL, INV, DIV, FTOI, ITOF, FLOOR, SQRT
 }OPERATOR;
 
 extern const unsigned int emask;

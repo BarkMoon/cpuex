@@ -3,5 +3,5 @@ float AddFloat(float a, float b){
 }
 
 float SubFloat(float a, float b){
-  return fadd(a, -b);
+  return AddFloat(a, -b);
 }

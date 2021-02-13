@@ -4,5 +4,5 @@
 #include "floor.h"
 
 float FloorFloat(float f){
-  return (float)floor(f);
+  return floorf(f);
 }

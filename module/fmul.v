@@ -1,7 +1,5 @@
-//後でオーバーフローとアンダーフローに対応しよう。
-
 `default_nettype none
-module fmul #(parameter NSTAGE = 2)(
+module fmul #(parameter NSTAGE = 3)(
     input wire [31:0] x1,
     input wire [31:0] x2,
     output wire [31:0] y,
@@ -29,9 +27,9 @@ reg [12:0] hi1r, hi2r;
 reg [10:0] lo1r, lo2r;
 
 // 3.Ha*Hb, Ha*Lb, La*Hbの計算を行う。
-wire [25:0] hh = hi1 * hi2;
-wire [23:0] hl = hi1 * lo2;
-wire [23:0] lh = lo1 * hi2;
+wire [25:0] hh = hi1r * hi2r;
+wire [23:0] hl = hi1r * lo2r;
+wire [23:0] lh = lo1r * hi2r;
 
 // stage = 2 (x1r[1], x2r[1], hhr, hlr, lhr -> mmul, ym0, ye0)
 

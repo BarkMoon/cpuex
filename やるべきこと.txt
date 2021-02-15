@@ -1,4 +1,9 @@
 
 ・オワリ！
 
-(・fdivのzeroinf問題をなんとかする)
+fadd 2
+fsub 2
+fmul 2
+finv 2
+fdiv 4
+sqrt 4

@@ -17,10 +17,16 @@ x2	x2r				x2inv	x2invr
 	finv 0	finv 1	finv 2	finv 3	finv 4	
 						fmul 0	fmul 1	fmul 2	fmul 3
 
-0	1	2	3	4	5	6
-x2			x2inv	x2invr		y
+0	1	2	3	4	5	6	7
+x2			x2inv	x2invr			y
 finv 0	finv 1	finv 2	finv 3	
-				fmul 0	fmul 1	fmul 2
+				fmul 0	fmul 1	fmul 2	fmul 3
+
+0	1	2	3	4	5	6
+x2		x2inv		y
+finv 0	finv 1	finv 2		
+		fmul 0	fmul 1	fmul 2
+x1i	x1ir[0]	x1ir[1]
 
 FPU fadd
 0	1	2	3

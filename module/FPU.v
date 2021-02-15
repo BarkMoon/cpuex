@@ -62,8 +62,8 @@ module FPU(clk, rstn, ctl, x1, x2, y, ready, en);
     localparam FINV_NSTAGE = 2;
     localparam FDIV_NSTAGE = 4;
     localparam FHALF_NSTAGE = 0;
-    localparam FTOI_NSTAGE = 2;
-    localparam ITOF_NSTAGE = 2;
+    localparam FTOI_NSTAGE = 1;
+    localparam ITOF_NSTAGE = 1;
     localparam FLOOR_NSTAGE = 1;
     localparam FEQ_NSTAGE = 0;
     localparam FLE_NSTAGE = 0;
@@ -76,7 +76,7 @@ module FPU(clk, rstn, ctl, x1, x2, y, ready, en);
     localparam FISPOS_NSTAGE = 0;
     localparam FISNEG_NSTAGE = 0;
     localparam SQRT_NSTAGE = 4;
-    localparam FSQR_NSTAGE = 2;
+    localparam FSQR_NSTAGE = FMUL_NSTAGE;
 
     always @(posedge clk) begin
         if(~rstn) begin

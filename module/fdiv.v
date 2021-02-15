@@ -23,18 +23,16 @@ finv u1 (x2i, x2inv, clk, rstn);  // NSTAGE = 2
 wire [31:0] ans;
 wire ovf;
 
-fmul u2 (x1ir[1], x2invr, ans, ovf, clk, rstn);  // NSTAGE = 2
+fmul u2 (x1ir[1], x2inv, ans, ovf, clk, rstn);  // NSTAGE = 2
 
 assign y = ans;
 
 always @(posedge clk) begin
     if(~rstn) begin
         x1ir[0] <= 'b0;
-        x2invr <= 'b0;
     end else begin
         x1ir[0] <= x1i;
         x1ir[1] <= x1ir[0];
-        x2invr <= x2inv;
     end
 end
 

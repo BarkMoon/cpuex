@@ -116,10 +116,10 @@ reg [4:0] topr;
 
 wire [24:0] af = afncr + incr;
 wire [4:0] ttop = topr + af[24];
-wire [8:0] ae = lxr[2][30:23] + ttop - 25;
+wire [8:0] ae = lxr[1][30:23] + ttop - 25;
 
 wire ys = lxr[1][31];
-wire [7:0] ye = (ae[8]) ? ((ttopr >= 25) ? 8'b11111111 : 8'b0) : ae[7:0];
+wire [7:0] ye = (ae[8]) ? ((ttop >= 25) ? 8'b11111111 : 8'b0) : ae[7:0];
 wire [22:0] yf = (ye == 8'b0 || ye == 8'b11111111) ? 23'b0 : af[22:0];
 
 assign y = (&lxr[1][30:23]) ? lxr[1] : {ys, ye, yf};

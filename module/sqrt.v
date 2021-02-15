@@ -46,6 +46,7 @@ wire [71:0] tsqmcoe = tsqmulmr * coemp1;
 reg [71:0] tsqmcoer;
 
 wire iszero = ~(|xr[3][30:23]);
+wire isinf = (&xr[3][30:23]);
 
 wire ys = 0;
 wire [8:0] ye2 = (xr[3][23]) ? xr[3][30:23] + 127 : xr[3][30:23] + 126;
@@ -53,7 +54,8 @@ wire [7:0] ye = ye2[8:1];
 wire [23:0] ym2 = tsqmcoer[69:47] + tsqmcoer[46];
 wire [22:0] ym = (xr[3][23] && ~(|xr[3][22:1])) ? 23'b0 : ym2[22:0];
 
-assign y = (iszero) ? 32'b0 : {ys, ye, ym};
+assign y =  (iszero) ? 32'b0 :
+            (isinf) ? {1'b0, 8'b11111111, 23'b0} : {ys, ye, ym};
 
 always @(posedge clk) begin
     if(~rstn) begin

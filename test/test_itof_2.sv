@@ -2,12 +2,12 @@
 `default_nettype none
 
 module test_itof
-    #(parameter NSTAGE = 2,
-      parameter REPEATNUM = 50,
+    #(parameter NSTAGE = 1,
+      parameter REPEATNUM = 10000000,
       parameter RANDSEED = 2) ();
 
 wire [31:0] x1,y;
-shortreal    fx1, fy, absfy;
+shortreal    fx1, fy, absfy, float_y;
 logic [31:0] absx, fybit, absfybit;
 
 logic clk, rstn;
@@ -92,17 +92,19 @@ always @(posedge clk) begin
         absfybit = $shortrealtobits(absfy);
         fybit = {x1_reg[NSTAGE][31], absfybit[30:0]};
         fy = $bitstoshortreal(fybit);
+        float_y = $bitstoshortreal(y);
 
         diff = (fybit >= y) ? fybit - y : y - fybit;
-        $display("diff = %d", diff);
-        //if(diff >= 1) begin
+        //$display("diff = %d", diff);
+        //$display("%f %f", (fy + float_y) / 2, $itor($signed(x1_reg[NSTAGE])));
+        if(diff >= 1 && (fy + float_y) / 2 != $itor($signed(x1_reg[NSTAGE]))) begin
    	        $display("x = %b, %d",
 	        x1_reg[NSTAGE], $signed(x1_reg[NSTAGE]));
    	        $display("%.15f %b,%3d,%b", fy,
 	        fybit[31], fybit[30:23], fybit[22:0]);
-   	        $display("%.15f %b,%3d,%b\n", $bitstoshortreal(y),
+   	        $display("%.15f %b,%3d,%b\n", float_y,
 	        y[31], y[30:23], y[22:0]);
-        //end
+        end
     end
     //$display("val = %b, %b, %b", val[0], val[1], val[2]);
     //$display("%e %b,%3d,%b %b\n", $bitstoshortreal(y),y[31], y[30:23], y[22:0], ovf);
